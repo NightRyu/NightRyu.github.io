@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"bmcastle.club","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="一、	塔防游戏的发展现代塔防游戏一般认为源自于《星际争霸》《帝国时代II》和《魔兽争霸III》的玩家自制地图。一个最简单的塔防游戏应该是这样的：如图所示，一条出现敌人的路径，在道路两侧有固定位置（也有不固定位置的类型）放置一定攻击范围的防御塔，利用防御塔的攻击阻止敌人到达路径的终点。如果玩家能够将每一波次的敌人全部在终点之前击杀，就可以获得这一局的最高评价。 经典塔防模型  从这种基础的玩法出发，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从最简单的塔防到《明日方舟》">
+<meta property="og:url" content="http://bmcastle.club/2022/05/07/%E4%BB%8E%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%A1%94%E9%98%B2%E5%88%B0%E3%80%8A%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E3%80%8B/index.html">
+<meta property="og:site_name" content="NightRyu的城堡">
+<meta property="og:description" content="一、	塔防游戏的发展现代塔防游戏一般认为源自于《星际争霸》《帝国时代II》和《魔兽争霸III》的玩家自制地图。一个最简单的塔防游戏应该是这样的：如图所示，一条出现敌人的路径，在道路两侧有固定位置（也有不固定位置的类型）放置一定攻击范围的防御塔，利用防御塔的攻击阻止敌人到达路径的终点。如果玩家能够将每一波次的敌人全部在终点之前击杀，就可以获得这一局的最高评价。 经典塔防模型  从这种基础的玩法出发，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-07T15:13:00.000Z">
+<meta property="article:modified_time" content="2023-02-07T15:22:57.268Z">
+<meta property="article:author" content="NightRyu">
+<meta property="article:tag" content="游戏测评">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://bmcastle.club/2022/05/07/%E4%BB%8E%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%A1%94%E9%98%B2%E5%88%B0%E3%80%8A%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E3%80%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>从最简单的塔防到《明日方舟》 | NightRyu的城堡</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">NightRyu的城堡</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">青年穷龙没有财宝</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://bmcastle.club/2022/05/07/%E4%BB%8E%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%A1%94%E9%98%B2%E5%88%B0%E3%80%8A%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E3%80%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NightRyu">
+      <meta itemprop="description" content="NightRyu的博客，偶尔会发一些学习笔记和杂谈">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NightRyu的城堡">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从最简单的塔防到《明日方舟》
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-07 23:13:00" itemprop="dateCreated datePublished" datetime="2022-05-07T23:13:00+08:00">2022-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-07 23:22:57" itemprop="dateModified" datetime="2023-02-07T23:22:57+08:00">2023-02-07</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="一、塔防游戏的发展"><a href="#一、塔防游戏的发展" class="headerlink" title="一、	塔防游戏的发展"></a>一、	塔防游戏的发展</h1><p>现代塔防游戏一般认为源自于《星际争霸》《帝国时代II》和《魔兽争霸III》的玩家自制地图。一个最简单的塔防游戏应该是这样的：如图所示，一条出现敌人的路径，在道路两侧有固定位置（也有不固定位置的类型）放置一定攻击范围的防御塔，利用防御塔的攻击阻止敌人到达路径的终点。如果玩家能够将每一波次的敌人全部在终点之前击杀，就可以获得这一局的最高评价。</p>
+<p><img src=从最简单的塔防到《明日方舟》\经典塔防模型.png style="" alt="经典塔防模型" align=center />经典塔防模型<br></img> </p>
+<p>从这种基础的玩法出发，塔防游戏通常会添加一些其它内容，例如造成法术伤害的防御塔和造成物理伤害的防御塔；仅攻击敌方单体的防御塔和攻击一定范围内敌人的防御塔；会降低敌人移动速度的防御塔等。同时，敌人的类型也会增多、增强。但是，游戏的总体思路仍然是阻止敌人到达终点，即玩家的最终目的是让所有防御塔的DPS大于敌人的血量和移动速度之比。保卫萝卜就是这样一款塔防游戏——它游戏中所有的防御塔只能攻击敌人或者降低敌人的移动速度，而敌人只能向终点奔去（终点を駆ける）。</p>
+<p><img src=从最简单的塔防到《明日方舟》\保卫萝卜.jpg style="" alt="保卫萝卜" align=center />保卫萝卜<br></img> </p>
+<p>而kingdom rush则与这种基本的塔防游戏有所不同。在kingdom rush一代中，游戏中设置了使用物理攻击的弓箭塔、法术攻击的巫师塔和范围攻击的炮塔。但与以往所有塔防游戏都不同的一点是，kingdom rush增加了兵营这种防御塔。兵营会在玩家设置的集结点处有三个士兵单位，这种单位可以在攻击敌人的同时，阻挡其它敌人前进的脚步，将敌人到达终点的时间延长——它在塔防游戏中引入了“阻挡”机制。这改变了塔防游戏的目标，玩家无需考虑如何提升DPS消灭敌人，而是考虑如何利用阻挡来给其它防御塔拉扯出良好的输出环境提高输出。用MMORPG的术语来说，就是游戏中有了战士\法师的角色分工。</p>
+<p><img src=从最简单的塔防到《明日方舟》\kr.PNG style="" alt="kr" align=center />Kingdom Rush<br></img> </p>
+<p>千年战争Aigis——DMM社的R18塔防页游<del>（偶尔会被认为是粥游的爹）</del>——则将Gacha（氪金抽卡）机制引入到了塔防游戏中来，这让运营者获得了一个新的从塔防游戏获利的角度。游戏中所有的防御塔都被替换成了有着不同的特性和技能的角色。这些角色无论是否直接接敌都有可能受到敌人造成的伤害，并因受到伤害而退场。与之相对的，千年战争引入了治疗者以及其它几个能给其他角色恢复生命的职业。它成功将战法牧铁三角体系融入到了塔防游戏中。至此，游玩塔防游戏的游戏思路中不仅仅要考虑敌人的进攻，还需要考虑角色使用技能的时机和角色生存所需的条件，若角色不能抗住敌人的进攻，会直接导致战线的崩溃和关卡的失败。毕竟，如果角色在关卡中死亡，在千年战争的关卡中同样不能获得最高游戏评价。</p>
+<p><img src=从最简单的塔防到《明日方舟》\千年战争AIGIS.jpg style="" alt="千年战争AIGIS" align=center />千年战争AIGIS<br></img> </p>
+<h1 id="二、回到明日方舟"><a href="#二、回到明日方舟" class="headerlink" title="二、	回到明日方舟"></a>二、	回到明日方舟</h1><h2 id="棋盘格、角色朝向和战斗"><a href="#棋盘格、角色朝向和战斗" class="headerlink" title="棋盘格、角色朝向和战斗"></a>棋盘格、角色朝向和战斗</h2><p>现在，让我们聊回明日方舟。明日方舟作为一款塔防游戏，在它诸多前辈的基础上添加了它独有的元素——地图棋盘格和朝向机制。地图的朝向机制让明日方舟的防御塔和其他游戏不同，只能攻击到自身某一个方向上攻击范围内的敌人。</p>
+<p><img src=从最简单的塔防到《明日方舟》\明日方舟1.jpg style="" alt="明日方舟" align=center />明日方舟<br></img> </p>
+<p>这就导致了明日方舟中的所有角色都无法攻击到自己背后的敌人——除非背后和敌人短兵相接。这就导致玩家需要考虑如何将高台角色攻击范围的收益最大化和对于空中敌人单位及时造成伤害，近卫干员是否需要利用面前额外的范围提前攻击暂时没有移动的敌人。</p>
+<p>另外，游戏中也有一些特殊的场地机制——例如活动“长夜临光”中城市霓虹机制——根据玩家角色朝向不同，场地呈现不同的状态，玩家做出的决策也因此有所不同。这种独有的机制让明日方舟的关卡拥有更多的可能性，让游戏变得更加“有趣”。</p>
+<h2 id="COST、战线展开与失败的“风投”体系"><a href="#COST、战线展开与失败的“风投”体系" class="headerlink" title="COST、战线展开与失败的“风投”体系"></a>COST、战线展开与失败的“风投”体系</h2><p>在塔防游戏中，通常都会利用cost机制来限制玩家放置防御塔。在保卫萝卜和kingdom rush中，是“金币”——放置防御塔会消耗金币，而击杀敌人会获得金币。在传统塔防中，通常都是如上的方式。虽然会有方法获得额外的金币，但是一局中能获得金币的总量是大体确定的。不过，通常一个关卡给予的所有资源足够玩家完成这一局游戏。</p>
+<p>而在植物大战僵尸这款相对非主流的塔防游戏中，cost被设计为阳光。在白天的关卡中，天上经过一定时间会掉落阳光，而向日葵则会提供额外的阳光。明日方舟的cost机制在一定程度上继承了这一点——所有cost均由稳定的自动获取的cost和先锋角色提供的额外cost两部分组成。这样的设计就带来了这样的情况——玩家在一局游戏中理论上能获得的cost数量无上限。这样，即使角色撤回或死亡有相对一局游戏时间较长的惩罚性CD和cost上升，玩家也能够利用无上限的cost重新展开战线抵挡敌人的攻击。</p>
+<p>这样无上限的资源和有尽头的关卡会十分的灵活。例如在一个Boss Rush关卡（指连续出现Boss敌人的关卡）中，玩家可以多次调整角色的站位来针对不同的Boss或者不同波次中敌人的不同配置。玩家可以在前方阵线遭到破坏后，敌人到达终点前重组阵线。</p>
+<p>但是，明日方舟中“风投”体系——风笛的天赋可以让先锋角色放置后更快使用技能，而 “投降”先锋（牺牲了释放技能时阻挡敌人的能力，换来短时间大量cost的先锋角色）在风笛的辅助下，可以在落地后迅速使用技能——尤其是桃金娘几乎在落地的瞬间使用技能——让制约玩家战线展开的限制几乎可以称得上不存在。通过风头体系快速获得大量cost的方式直接导致了其他先锋变成了相对可有可无的角色，整个先锋之间互相加成的体系变得十分的鸡肋，先锋之间相互辅助的战斗形式被玩家忽略了——既然我已经有了足够使用近卫、重装的费用，我何必用相对伤害更低的先锋呢？整个游戏中的先锋被分成了两类——“风投”和其他先锋。战斗早期用先锋产生cost并抵抗压力，然后逐渐展开整个战线的游戏玩法几乎可以说消失了。</p>
+<h2 id="波次、敌人以及为什么真银斩会这么强"><a href="#波次、敌人以及为什么真银斩会这么强" class="headerlink" title="波次、敌人以及为什么真银斩会这么强"></a>波次、敌人以及为什么真银斩会这么强</h2><p>在明日方舟中，游戏并不像保卫萝卜那样会有明确的波次提示，而是用敌人击杀数代替。玩家可以根据敌人的密度和强度将关卡大概分成几个波次——非压力波、压力波、高压波——这些波次可能会反复多次，随后关卡进入收尾阶段。然而如此划分并没有明确的标准——玩家甚至可以将所有敌人控制在地图上一次击杀，可是这真的能认为这个关卡只有这一波敌人吗。</p>
+<p>而不同的波次中通常会出现不同强度的敌人，关卡的进度逐渐接近尾声，敌人的强度也就越高，玩家就需要拿出更加具有针对性的阵型处理敌人的进攻。在同一关卡中，开始时敌人可能只需要狙击角色就能够造成足够的伤害；到中盘可能有高防御的敌人，需要术师角色使用无视防御的法术进行处理；到关卡收尾的部分，玩家更可能需要使用多个技能进行组合才能化解敌人的攻势。</p>
+<p>话又说回来，虽然有高压状态和非压状态的区分，明日方舟的关卡在塔防游戏的类型中关卡仍然是比较短的。同时大部分的关卡地图都比较小，这就让真银斩和火山这种范围比较大的群攻技能在处理高压波次时的表现十分亮眼。较大的范围让他们可以轻易攻击到较多的敌人，并且伤害也足够打破敌人的防御&#x2F;法术抗性来消灭敌人。这就让作为关卡难点的高压波次被轻易的得到化解。这就是为什么银灰作为开服角色，在关卡中仍然是常青树的原因。</p>
+<p>不过我要另外说一句，史尔特尔的黄昏与其它两个技能并不一样，它通过献祭了角色的持续站场能力，带来了短期的极高输出。由于数值策划用脚填写的技能数据，导致它只要不是在前期的非压力波次使用，都能获得足够的收益。同时，落地之后几乎立刻就能使用的特性，让这个技能更类似灵活的“战场救火队”——哪里战线被突破了，就用黄昏撑一下，从而拉扯出重建战线所需的时间——而银灰和艾雅法拉本身就能够作为战线的一部分存在。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B8%B8%E6%88%8F%E6%B5%8B%E8%AF%84/" rel="tag"># 游戏测评</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/" rel="prev" title="基于奇异值分解的图像压缩和数据隐藏--作业（">
+      <i class="fa fa-chevron-left"></i> 基于奇异值分解的图像压缩和数据隐藏--作业（
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/07/30/SQL%E6%B3%A8%E5%85%A5%E5%AE%9E%E9%AA%8C/" rel="next" title="SQL注入实验">
+      SQL注入实验 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%A1%94%E9%98%B2%E6%B8%B8%E6%88%8F%E7%9A%84%E5%8F%91%E5%B1%95"><span class="nav-number">1.</span> <span class="nav-text">一、	塔防游戏的发展</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%9B%9E%E5%88%B0%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F"><span class="nav-number">2.</span> <span class="nav-text">二、	回到明日方舟</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%8B%E7%9B%98%E6%A0%BC%E3%80%81%E8%A7%92%E8%89%B2%E6%9C%9D%E5%90%91%E5%92%8C%E6%88%98%E6%96%97"><span class="nav-number">2.1.</span> <span class="nav-text">棋盘格、角色朝向和战斗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#COST%E3%80%81%E6%88%98%E7%BA%BF%E5%B1%95%E5%BC%80%E4%B8%8E%E5%A4%B1%E8%B4%A5%E7%9A%84%E2%80%9C%E9%A3%8E%E6%8A%95%E2%80%9D%E4%BD%93%E7%B3%BB"><span class="nav-number">2.2.</span> <span class="nav-text">COST、战线展开与失败的“风投”体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A2%E6%AC%A1%E3%80%81%E6%95%8C%E4%BA%BA%E4%BB%A5%E5%8F%8A%E4%B8%BA%E4%BB%80%E4%B9%88%E7%9C%9F%E9%93%B6%E6%96%A9%E4%BC%9A%E8%BF%99%E4%B9%88%E5%BC%BA"><span class="nav-number">2.3.</span> <span class="nav-text">波次、敌人以及为什么真银斩会这么强</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NightRyu</p>
+  <div class="site-description" itemprop="description">NightRyu的博客，偶尔会发一些学习笔记和杂谈</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NightRyu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

