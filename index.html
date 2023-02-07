@@ -149,6 +149,125 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://bmcastle.club/2023/02/07/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0001/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NightRyu">
+      <meta itemprop="description" content="NightRyu的博客，偶尔会发一些学习笔记和杂谈">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NightRyu的城堡">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/07/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0001/" class="post-title-link" itemprop="url">Python学习笔记001</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-02-07 16:57:11 / 修改时间：00:00:00" itemprop="dateCreated datePublished" datetime="2023-02-07T16:57:11+08:00">2023-02-07</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="Python学习记录001"><a href="#Python学习记录001" class="headerlink" title="Python学习记录001"></a>Python学习记录001</h1><p><del>这个系列也没写下去</del></p>
+<h2 id="Python中使用的列表"><a href="#Python中使用的列表" class="headerlink" title="Python中使用的列表"></a>Python中使用的列表</h2><p>创建格式：List &#x3D; [“Object1”,”Object2”,”Object3”]<br>Tips：无需声明类型——Python变量标识符没有类型。对于列表来说，数据项的类型并不重要。Python只需要知道给列表指定了名字，同时名字中包含有一些数据项。</p>
+<p>调用形式类似数组：List[0]<br>Tips:并非是数组——列表中自带一些方法提供现成的功能。使用”.”调用方法(和许多语言一样)</p>
+<table>
+<thead>
+<tr>
+<th>代码</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>append(“string”)</td>
+<td>表尾添加数据</td>
+</tr>
+<tr>
+<td>pop()</td>
+<td>表尾删除数据</td>
+</tr>
+<tr>
+<td>extend(另一个列表)</td>
+<td>在表尾添加一个数据项集合</td>
+</tr>
+<tr>
+<td>remove()</td>
+<td>删除表中特定的数据项</td>
+</tr>
+<tr>
+<td>insert()</td>
+<td>在特定位置前增加数据项</td>
+</tr>
+</tbody></table>
+<p>在python中，列表项中可以嵌套列表，调用内容形式类似二位数组<br>Python循环</p>
+<pre><code>for 目标标识符 in 列表:
+   #不用大括号真不戳
+   #代码代码代码
+   #缩进才能被编译器分析
+</code></pre>
+<p>在迭代中python会将列表中值依次赋予标识符  </p>
+<pre><code>count = 0
+while count &lt; len(list):
+print(list[count])
+count = count + 1	
+</code></pre>
+<p>和</p>
+<pre><code>for each_item in list:      
+print(each_item)
+</code></pre>
+<p>以上两段代码结果等效<br>·当循环中读取到列表时，print会将列表原样打印（包括中括号）<br>想要单独输出列表中的列表时，可以使用if语句  </p>
+<pre><code>if 条件1:
+    #条件1为真执行此处代码
+elif 条件2:
+    #条件2为真执行此处代码
+elif 条件3:
+    #条件3为真执行此处代码
+else:
+    #条件均为假执行此处代码
+</code></pre>
+<h2 id="Python-函数"><a href="#Python-函数" class="headerlink" title="Python 函数"></a>Python 函数</h2><pre><code>def 函数名( 参数表 ): 参数表可留空，但必须有括号
+    函数代码组
+</code></pre>
+<p>在函数中调用自身可以实现递归。默认递归深度不超过100，但在需要时可以修改。<br>Tips:<br> “BIF”内置函数<br>“组”Python代码块，用缩进指示分组</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://bmcastle.club/2022/03/23/%E3%80%8A%E7%BD%97%E5%AF%86%E6%AC%A7%E4%B8%8E%E8%BE%9B%E5%BE%B7%E7%91%9E%E6%8B%89%E3%80%8B%E8%BF%98%E6%9C%89%E5%88%9D%E9%9F%B3%E6%9C%AA%E6%9D%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -297,12 +416,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
