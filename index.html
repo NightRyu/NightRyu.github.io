@@ -325,7 +325,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-07 23:09:55" itemprop="dateModified" datetime="2023-02-07T23:09:55+08:00">2023-02-07</time>
+                <time title="修改时间：2023-02-08 10:43:16" itemprop="dateModified" datetime="2023-02-08T10:43:16+08:00">2023-02-08</time>
               </span>
 
           
@@ -344,259 +344,14 @@
 <p>我们定义矩阵A为m×n的矩阵，它的SVD为：</p>
 <pre><code>A=UΣV^T
 </code></pre>
-<p>其中U是一个m×m的矩阵，Σ是m×n的矩阵，除了主对角线上的值均为0，主对角线上每个元素都称为奇异值。U和V均满足</p>
-<pre><code>U×U^T=I
-V×V^T=I
-</code></pre>
-<p>对于奇异值，与特征值类似，在奇异值矩阵中也是由大到小排列，并且减小的非常快，在很多情况下，前10%甚至1%就占到了全部奇异值之和的99%以上</p>
-<p>因此，我们可以用最大的k个奇异值和对应的左右奇向量近似描述矩阵。</p>
-<h1 id="基于奇异值分解的图像压缩"><a href="#基于奇异值分解的图像压缩" class="headerlink" title="基于奇异值分解的图像压缩"></a>基于奇异值分解的图像压缩</h1><h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>由奇异值快速下降的状态，我们可以将图片按照矩阵形式读取数据（如读取灰度图，或者读取彩色图并对它的各个颜色通道分别奇异值分解），并对其进行奇异值分解，通过舍弃较小奇异值的方式将图像在较小损失的情况下进行压缩。</p>
-<p><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/img.jpg" style alt="示例图片1" align="center">示例图片 1<br><br>示例图片 1</p>
-<p>对其进行奇异值分解，并选择前0.5%，1%，5%，10%，20%，30%，50%，70%奇异值，观察压缩效果</p>
-<table>
-<thead>
-<tr>
-<th align="center">压缩比例</th>
-<th align="center">结果图片</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">0.5%</td>
-<td align="center"><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/0.005new.jpg" style alt="0.5%" align="center"></td>
-</tr>
-<tr>
-<td align="center">1%</td>
-<td align="center"><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/0.015new.jpg" style alt="1%" align="center"></td>
-</tr>
-<tr>
-<td align="center">5%</td>
-<td align="center"><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/0.05new.jpg" style alt="5%" align="center"></td>
-</tr>
-<tr>
-<td align="center">10%</td>
-<td align="center"><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/0.1new.jpg" style alt="10%" align="center"></td>
-</tr>
-<tr>
-<td align="center">20%</td>
-<td align="center"><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/0.2new.jpg" style alt="20%" align="center"></td>
-</tr>
-<tr>
-<td align="center">30%</td>
-<td align="center"><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/0.3new.jpg" style alt="30%" align="center"></td>
-</tr>
-<tr>
-<td align="center">50%</td>
-<td align="center"><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/0.5new.jpg" style alt="50%" align="center"></td>
-</tr>
-<tr>
-<td align="center">70%</td>
-<td align="center"><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/0.7new.jpg" style alt="70%" align="center"></td>
-</tr>
-</tbody></table>
-<p>可以看出，仅选取前10%奇异值时，图片仍没有较严重的模糊。到仅选择5%奇异值时，图片才出现了明显噪点；仅选择1%、0.5%奇异值时，图片已经无法正确辨认。即使用奇异值分解可以将图片压缩到一个较高的压缩度。<br>在网络中，可以选择仅传输部分奇异值的方法，向用户传输压制后的图片来降低服务器压力的同时让用户能看到较清晰的图片。</p>
-<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><p>使用python语言模拟实现SVD进行图片压缩<br>    def chan_compress(mat, rate):<br>        # 对单通道奇异值分解<br>        u, sigma, vt &#x3D; np.linalg.svd(mat)</p>
-<pre><code>    row = u.shape[0]
-    col = vt.shape[0]
-    # 初始化一个 row × col 的全0矩阵
-    new_mat = np.zeros((row, col))
-    for i in range(len(sigma)):
-        # 取前i个奇异值，依照近似公式重建矩阵
-        new_mat = new_mat + sigma[i] * np.dot(u[:, i].reshape(row, 1), vt[i, :].reshape(1, col))
-        if float(i) / len(sigma) &gt; rate:
-            # 将超出范围的值回归到0-255区间内
-            new_mat[new_mat &lt; 0] = 0
-            new_mat[new_mat &gt; 255] = 255
-            break
-    # 返回值需取整，使用无符号8位整形
-    return np.rint(new_mat).astype(int)
-
-
-def img_compress(img, rate):
-    r, g, b = img.split()
-    # R通道压缩
-    r_new = chan_compress(r, rate)
-    # G通道压缩
-    g_new = chan_compress(g, rate)
-    # B通道压缩
-    b_new = chan_compress(b, rate)
-    # 重建压缩后的图片
-    img_new = np.stack((r_new, g_new, b_new), 2)
-    Image.fromarray(np.uint8(img_new)).save(&quot;&#123;&#125;&quot;.format(rate)+&quot;new.jpg&quot;)
-
-    基于奇异值分解的数据隐藏
-</code></pre>
-<h2 id="实现原理-1"><a href="#实现原理-1" class="headerlink" title="实现原理"></a>实现原理</h2><h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><p>将原图像和水印进行SVD后，将得到的水印奇异值加到原图像SVD得到的Σ矩阵中，从而实现水印的嵌入。</p>
-<h3 id="安全性分析"><a href="#安全性分析" class="headerlink" title="安全性分析"></a>安全性分析</h3><p>由奇异值的特性可以知道，隐藏在图片中的相关信息不会因为受到图片本身的压缩、扩张等情况影响到水印隐藏的效果。同时，我们可以通过打乱水印奇异值插入顺序的方法提升水印插入的安全性</p>
-<h2 id="实现代码-1"><a href="#实现代码-1" class="headerlink" title="实现代码"></a>实现代码</h2><h3 id="将sigma转化成m-n大小的对角矩阵"><a href="#将sigma转化成m-n大小的对角矩阵" class="headerlink" title="将sigma转化成m*n大小的对角矩阵"></a>将sigma转化成m*n大小的对角矩阵</h3><pre><code>def diagonal_mat(m, n, sigma):
-    v = np.zeros((m, n))
-    for i in range(len(sigma)):
-        v[i, i] = sigma[i]
-    return v
-</code></pre>
-<h3 id="不同大小的矩阵相加，默认加在左上角的部分-水印插入左上角）"><a href="#不同大小的矩阵相加，默认加在左上角的部分-水印插入左上角）" class="headerlink" title="不同大小的矩阵相加，默认加在左上角的部分(水印插入左上角）"></a>不同大小的矩阵相加，默认加在左上角的部分(水印插入左上角）</h3><pre><code>def add_mat(a, b):
-    ma = a.shape[0]
-    na = a.shape[1]
-    mb = b.shape[0]
-    nb = b.shape[1]
-    c = np.zeros((max(ma, mb), max(na, nb)))
-    for i in range(max(ma, mb)):
-        for j in range(max(na, nb)):
-            if i &lt; ma and j &lt; na:
-                c[i, j] += a[i, j]
-            if i &lt; mb and j &lt; nb:
-                c[i, j] += b[i, j]
-    return c
-</code></pre>
-<h3 id="截取矩阵中左上角m-n的部分（从左上角提取水印）"><a href="#截取矩阵中左上角m-n的部分（从左上角提取水印）" class="headerlink" title="截取矩阵中左上角m*n的部分（从左上角提取水印）"></a>截取矩阵中左上角m*n的部分（从左上角提取水印）</h3><pre><code>def extract_mat(a, m, n):
-    assert(m &lt; a.shape[0] and n &lt; a.shape[1])
-    b = a[:m, :n]
-    return b
-</code></pre>
-<h3 id="插入水印"><a href="#插入水印" class="headerlink" title="插入水印"></a>插入水印</h3><pre><code>def mark_insert(img, mark):
-    # 将图片转化为灰度图（若要插入彩色水印，应对三个通道做相同处理）
-    img.convert(&#39;L&#39;)
-    mark.convert(&#39;L&#39;)
-    mark_mat = numpy.ma.array(mark)
-    # 对图片进行奇异值分解，并将sigma矩阵转化为对角阵（原返回值为向量）
-    u_img, sigma_img, vt_img = np.linalg.svd(img)
-    sigma_img = diagonal_mat(u_img.shape[0], vt_img.shape[0], sigma_img)
-    # 插入水印并再次奇异值分解(这里没有考虑水印强度。如要考虑，应给水印乘上强度系数）
-    new_mat = add_mat(sigma_img, mark_mat)
-
-    u_new, sigma_new, vt_new = np.linalg.svd(new_mat)
-    sigma_new = diagonal_mat(u_new.shape[0], vt_new.shape[0], sigma_new)
-    img_new = np.dot(np.dot(u_img, sigma_new), vt_img)
-    Image.fromarray(np.uint8(img_new)).save(&quot;marked.jpg&quot;)
-    return img_new
-</code></pre>
-<h3 id="再次向原图片插入原水印，若结果图片相同，说明水印插入成功"><a href="#再次向原图片插入原水印，若结果图片相同，说明水印插入成功" class="headerlink" title="再次向原图片插入原水印，若结果图片相同，说明水印插入成功"></a>再次向原图片插入原水印，若结果图片相同，说明水印插入成功</h3><pre><code>def is_marked(img, mark, marked):
-    img_mark = mark_insert(img, mark)
-    marked_mat = numpy.ma.array(marked)
-    if img_mark.all() == marked_mat.all():
-        return True
-    else:
-        return False
-
-    完整实现代码
-</code></pre>
-<h2 id="示例数据"><a href="#示例数据" class="headerlink" title="示例数据"></a>示例数据</h2><h3 id="图片压缩示例图片"><a href="#图片压缩示例图片" class="headerlink" title="图片压缩示例图片"></a>图片压缩示例图片</h3><p><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/img.jpg" style alt="示例图片1" align="center">示例图片 1<br></p>
-<h3 id="数据隐藏实例灰度图片及水印"><a href="#数据隐藏实例灰度图片及水印" class="headerlink" title="数据隐藏实例灰度图片及水印"></a>数据隐藏实例灰度图片及水印</h3><p>示例图片： </p>
-<p><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/grey_img.jpg" style alt="示例图片2" align="center"><br>示例图片2<br></p>
-<p>示例水印：</p>
-<p><img src="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/mark.jpg" style alt="示例水印" align="center"><br>示例水印<br></p>
-<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><pre><code>import numpy as np
-import numpy.ma
-from PIL import Image
-
-
-# 将sigma转化成m*n大小的对角矩阵
-def diagonal_mat(m, n, sigma):
-    v = np.zeros((m, n))
-    for i in range(len(sigma)):
-        v[i, i] = sigma[i]
-    return v
-
-
-# 不同大小的矩阵相加，默认加在左上角的部分(水印插入左上角）
-def add_mat(a, b):
-    ma = a.shape[0]
-    na = a.shape[1]
-    mb = b.shape[0]
-    nb = b.shape[1]
-    c = np.zeros((max(ma, mb), max(na, nb)))
-    for i in range(max(ma, mb)):
-        for j in range(max(na, nb)):
-            if i &lt; ma and j &lt; na:
-                c[i, j] += a[i, j]
-            if i &lt; mb and j &lt; nb:
-                c[i, j] += b[i, j]
-    return c
-
-
-# 截取矩阵中左上角m*n的部分（从左上角提取水印）
-def extract_mat(a, m, n):
-    assert(m &lt; a.shape[0] and n &lt; a.shape[1])
-    b = a[:m, :n]
-    return b
-
-
-def mark_insert(img, mark):
-    # 将图片转化为灰度图（若要插入彩色水印，应对三个通道做相同处理）
-    img.convert(&#39;L&#39;)
-    mark.convert(&#39;L&#39;)
-    mark_mat = numpy.ma.array(mark)
-    # 对图片进行奇异值分解，并将sigma矩阵转化为对角阵（原返回值为向量）
-    u_img, sigma_img, vt_img = np.linalg.svd(img)
-    sigma_img = diagonal_mat(u_img.shape[0], vt_img.shape[0], sigma_img)
-    # 插入水印并再次奇异值分解(这里没有考虑水印强度。如要考虑，应给水印乘上强度系数）
-    new_mat = add_mat(sigma_img, mark_mat)
-
-    u_new, sigma_new, vt_new = np.linalg.svd(new_mat)
-    sigma_new = diagonal_mat(u_new.shape[0], vt_new.shape[0], sigma_new)
-    img_new = np.dot(np.dot(u_img, sigma_new), vt_img)
-    Image.fromarray(np.uint8(img_new)).save(&quot;marked.jpg&quot;)
-    return img_new
-
-
-# 再次向原图片插入原水印，若结果图片相同，说明水印插入成功
-def is_marked(img, mark, marked):
-    img_mark = mark_insert(img, mark)
-    marked_mat = numpy.ma.array(marked)
-    if img_mark.all() == marked_mat.all():
-        return True
-    else:
-        return False
-
-
-def chan_compress(mat, rate):
-    # 对单通道奇异值分解
-    u, sigma, vt = np.linalg.svd(mat)
-
-    row = u.shape[0]
-    col = vt.shape[0]
-    # 初始化一个 row × col 的全0矩阵
-    new_mat = np.zeros((row, col))
-    for i in range(len(sigma)):
-        # 取前i个奇异值，依照近似公式重建矩阵
-        new_mat = new_mat + sigma[i] * np.dot(u[:, i].reshape(row, 1), vt[i, :].reshape(1, col))
-        if float(i) / len(sigma) &gt; rate:
-            # 将超出范围的值回归到0-255区间内
-            new_mat[new_mat &lt; 0] = 0
-            new_mat[new_mat &gt; 255] = 255
-            break
-    # 返回值需取整，使用无符号8位整形
-    return np.rint(new_mat).astype(int)
-
-
-def img_compress(img, rate):
-    r, g, b = img.split()
-    # R通道压缩
-    r_new = chan_compress(r, rate)
-    # G通道压缩
-    g_new = chan_compress(g, rate)
-    # B通道压缩
-    b_new = chan_compress(b, rate)
-    # 重建压缩后的图片
-    img_new = np.stack((r_new, g_new, b_new), 2)
-    Image.fromarray(np.uint8(img_new)).save(&quot;&#123;&#125;&quot;.format(rate)+&quot;new.jpg&quot;)
-
-
-def main():
-    img = Image.open(&#39;img.jpg&#39;, &#39;r&#39;)
-    for i in [0.005, 0.01, 0.05, 0.1, 0.2, 0.3, 0.5, 0.7]:
-        img_compress(img, i)
-        print(i, &quot;\n&quot;)
-
-    mark = Image.open(&#39;mark.jpg&#39;, &#39;r&#39;).convert(&#39;L&#39;)
-    grey_img = Image.open(&#39;grey_img.jpg&#39;, &#39;r&#39;).convert(&#39;L&#39;)
-    print(is_marked(grey_img, mark, mark_insert(grey_img, mark)), &quot;\n&quot;)
-    print(&quot;finish&quot;)
-
-
-if __name__ == &quot;__main__&quot;:
-    main()
-</code></pre>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/04/16/%E5%9F%BA%E4%BA%8E%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9%E5%92%8C%E6%95%B0%E6%8D%AE%E9%9A%90%E8%97%8F-%E4%BD%9C%E4%B8%9A%EF%BC%88/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -770,7 +525,6 @@ if __name__ == &quot;__main__&quot;:
 <p><del>而且还短</del></p>
 <p><del>还没什么内容</del></p>
 <h1 id="0、写在前面"><a href="#0、写在前面" class="headerlink" title="0、写在前面"></a>0、写在前面</h1><p>建站也已经有一段时间了，但是至今都仍然什么都没有写。本着多少都要写点什么的精神，我决定开始写作本博客的第一个专栏。这个专栏会不定期写一些有关我喜欢歌曲的杂谈，聊聊和歌有关的故事。</p>
-<h1 id="一、这周的歌——ロミオとシンデレラ"><a href="#一、这周的歌——ロミオとシンデレラ" class="headerlink" title="一、	这周的歌——ロミオとシンデレラ"></a>一、	这周的歌——ロミオとシンデレラ</h1><p>作为本专栏的第一篇文章，我想讲的歌是doriko的《ロミオとシンデレラ》（罗密欧与辛德瑞拉）。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/03/23/%E3%80%8A%E7%BD%97%E5%AF%86%E6%AC%A7%E4%B8%8E%E8%BE%9B%E5%BE%B7%E7%91%9E%E6%8B%89%E3%80%8B%E8%BF%98%E6%9C%89%E5%88%9D%E9%9F%B3%E6%9C%AA%E6%9D%A5/#more" rel="contents">
