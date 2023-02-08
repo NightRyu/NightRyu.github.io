@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"bmcastle.club","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言由于之前博客是趁着腾讯云的服务器打折时办理了一年的，今年续费价格有点高。同时我不能忍受WordsPress默认的巨丑的主题了，因此虽然WordsPress使用起来更容易，博主仍然决定将本博客更换为使用hexo并迁移到免费的GitHub Pages上。 hexo官网 配置环境安装Nodejs (最低版本8.10，建议使用8.10以上版本)安装Git安装好Nodejs后，在命令提示符中输入npm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Github上使用hexo搭建博客">
+<meta property="og:url" content="http://bmcastle.club/2023/02/08/%E5%9C%A8Github%E4%B8%8A%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/index.html">
+<meta property="og:site_name" content="NightRyu的城堡">
+<meta property="og:description" content="前言由于之前博客是趁着腾讯云的服务器打折时办理了一年的，今年续费价格有点高。同时我不能忍受WordsPress默认的巨丑的主题了，因此虽然WordsPress使用起来更容易，博主仍然决定将本博客更换为使用hexo并迁移到免费的GitHub Pages上。 hexo官网 配置环境安装Nodejs (最低版本8.10，建议使用8.10以上版本)安装Git安装好Nodejs后，在命令提示符中输入npm">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://bmcastle.club/2023/02/08/%E5%9C%A8Github%E4%B8%8A%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/Folder.png">
+<meta property="og:image" content="http://bmcastle.club/2023/02/08/%E5%9C%A8Github%E4%B8%8A%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/textmain.png">
+<meta property="article:published_time" content="2023-02-08T08:17:39.000Z">
+<meta property="article:modified_time" content="2023-02-08T08:44:27.699Z">
+<meta property="article:author" content="NightRyu">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="搭建博客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bmcastle.club/2023/02/08/%E5%9C%A8Github%E4%B8%8A%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/Folder.png">
+
+<link rel="canonical" href="http://bmcastle.club/2023/02/08/%E5%9C%A8Github%E4%B8%8A%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>在Github上使用hexo搭建博客 | NightRyu的城堡</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">NightRyu的城堡</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">青年穷龙没有财宝</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://bmcastle.club/2023/02/08/%E5%9C%A8Github%E4%B8%8A%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NightRyu">
+      <meta itemprop="description" content="NightRyu的博客，偶尔会发一些学习笔记和杂谈">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NightRyu的城堡">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在Github上使用hexo搭建博客
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-02-08 16:17:39 / 修改时间：16:44:27" itemprop="dateCreated datePublished" datetime="2023-02-08T16:17:39+08:00">2023-02-08</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>由于之前博客是趁着腾讯云的服务器打折时办理了一年的，今年续费价格有点高。同时我不能忍受WordsPress默认的巨丑的主题了，因此虽然WordsPress使用起来更容易，博主仍然决定将本博客更换为使用hexo并迁移到免费的GitHub Pages上。</p>
+<p><a herf="https://hexo.io/zh-cn/">hexo官网</a></p>
+<h1 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h1><p>安装<a herf="https://nodejs.org/en/">Nodejs</a> (最低版本8.10，建议使用8.10以上版本)<br>安装<a herf="https://git-scm.com/">Git</a><br>安装好Nodejs后，在命令提示符中输入npm install -g hexo-cli，安装hexo框架（由于网络问题，可能需要更换安装源）</p>
+<h1 id="配置hexo"><a href="#配置hexo" class="headerlink" title="配置hexo"></a>配置hexo</h1><h2 id="将框架运行起来"><a href="#将框架运行起来" class="headerlink" title="将框架运行起来"></a>将框架运行起来</h2><p>在命令提示符中切换到创建项目的文件夹中<br>输入hexo inti 博客名<br>创建完成后，会生成一个文件夹，名称与你设置的博客名相同<br>文件夹内部如下图<br><img src="/2023/02/08/%E5%9C%A8Github%E4%B8%8A%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/Folder.png" style alt="文件结构" align="center/"><br>将命令提示符切换到博客文件夹<br>输入npm install 安装相关依赖包</p>
+<p>输入hexo server测试运行你的网页，如果运行成功会提示</p>
+<pre><code>INFO  Hexo is running at http://localhost:4000/ . Press Ctrl+C to stop.
+</code></pre>
+<p>将running at后面的域名输入浏览器，即可浏览运行效果（通常应该都是localhost:4000吧）</p>
+<p><img src="/2023/02/08/%E5%9C%A8Github%E4%B8%8A%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/textmain.png" style alt="刚刚搭建的主页面" align="center/"></p>
+<p>到这一步，博客的框架基本上已经搭建起来了</p>
+<h2 id="配置博客"><a href="#配置博客" class="headerlink" title="配置博客"></a>配置博客</h2><p>参考hexo官网给出的手册配置博客的标题、关键词、语言、时区等等内容<br>打开生成的_config.yml修改文件配置</p>
+<pre><code>title: 网站标题
+subtitle: 网站副标题
+description: 网站描述
+keyword: 网站的关键词（可用多个关键词）
+</code></pre>
+<p>以下部分可以跳过，做这部分是为了让搜索引擎能够找到你的博客<br>有需要的话，可以安装对应依赖，对网站进行简单的SEO，步骤如下：<br>执行npm install hexo-generator-sitemap –save 安装依赖<br>在_config.yml中添加<br>    sitemap:<br>    path: sitemap.xml</p>
+<p>执行hexo g，之后运行hexo server。<br>进入<a target="_blank" rel="noopener" href="http://localhost:4000/sitemap.xml">http://localhost:4000/sitemap.xml</a>即可查看效果，完成后就可以到各大搜索引擎提交stiemap了。</p>
+<h2 id="配置博客主题"><a href="#配置博客主题" class="headerlink" title="配置博客主题"></a>配置博客主题</h2><p>首先，找到一个你喜欢的主题。笔者使用的是NexT——应用广泛，应该是Github上star比较多的一个主题<br>Github链接：<a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next">https://github.com/theme-next/hexo-theme-next</a><br>将它下载并将文件夹解压缩到项目文件夹下的theme文件夹。<br>修改_config.yml中的theme项后面的名称为解压出来文件夹的名称，进行hexo g<br>运行hexo server 查看运行效果。</p>
+<h2 id="添加文章"><a href="#添加文章" class="headerlink" title="添加文章"></a>添加文章</h2><p>在文件夹下执行命令 hexo new &lt;文章名称&gt;<br>随后hexo会在source\_post中生成一个.md文件，打开后以md形式编辑即可<br>打开后，发现其中存在这样一段内容</p>
+<pre><code>---
+title: &lt;title&gt;
+date: YYYY-MM-DD HH:MM:SS
+tags:
+---
+</code></pre>
+<p>这里的内容被称为Front-matter，用于hexo渲染该md文档。此外还有一些配置可供添加，详细请查看官网的这个链接：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/front-matter">https://hexo.io/zh-cn/docs/front-matter</a><br><strong>注意：配置tags时形式：<br>tags: [‘tag1’,’tag2’,’tag3’]</strong></p>
+<p>向文章中添加图片:<br>修改config如下</p>
+<pre><code>post_asset_folder: true
+</code></pre>
+<p>修改完成后，生成文件时会生成一个同名的文件夹，将要使用的图片等资源<br>将要使用的图片复制进同名文件夹后，采用相对路径，以HTML代码的形式进行调用</p>
+<pre><code>&lt;div style=&quot;text-align: center&quot;&gt; &lt;!--用于图片居中--&gt;
+  &lt;img src=&quot;图片路径&quot; style=&quot;zoom:缩放大小&quot; alt=&quot;图片名称&quot; align=center/&gt;
+  &lt;/img&gt;
+&lt;/div&gt;
+</code></pre>
+<p>但这时若启动hexo s会发现找不到图片资源<br>因此要安装插件npm install hexo-deployer-git –save<br>同时将上述代码中图片路径仅保留图片的名字，执行hexo d后，hexo会处理图片路径的。</p>
+<h1 id="将你的博客展示在Github-Pages上"><a href="#将你的博客展示在Github-Pages上" class="headerlink" title="将你的博客展示在Github Pages上"></a>将你的博客展示在Github Pages上</h1><p>首先要注册一个<a herf="github.com">GitHub</a>账号</p>
+<p>建立一个存储库，名称是xxx.github.io xxx是你的GitHub用户名</p>
+<p>修改_config.yml Depolyment部分</p>
+<pre><code>deploy:
+  type: git
+  repo: https://github.com/NightRyu/NightRyu.github.io
+  branch: master
+</code></pre>
+<p>执行 hexo d<br>等待一段时间，你应该就能在你的 xxx.github.io上看到你的博客了</p>
+<p><del>设置个性域名的部分等以后再写吧</del></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag"># 学习</a>
+              <a href="/tags/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/" rel="tag"># 搭建博客</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/30/SQL%E6%B3%A8%E5%85%A5%E5%AE%9E%E9%AA%8C/" rel="prev" title="SQL注入实验">
+      <i class="fa fa-chevron-left"></i> SQL注入实验
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">配置环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEhexo"><span class="nav-number">3.</span> <span class="nav-text">配置hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E6%A1%86%E6%9E%B6%E8%BF%90%E8%A1%8C%E8%B5%B7%E6%9D%A5"><span class="nav-number">3.1.</span> <span class="nav-text">将框架运行起来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%8D%9A%E5%AE%A2"><span class="nav-number">3.2.</span> <span class="nav-text">配置博客</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98"><span class="nav-number">3.3.</span> <span class="nav-text">配置博客主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E6%96%87%E7%AB%A0"><span class="nav-number">3.4.</span> <span class="nav-text">添加文章</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%86%E4%BD%A0%E7%9A%84%E5%8D%9A%E5%AE%A2%E5%B1%95%E7%A4%BA%E5%9C%A8Github-Pages%E4%B8%8A"><span class="nav-number">4.</span> <span class="nav-text">将你的博客展示在Github Pages上</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">NightRyu</p>
+  <div class="site-description" itemprop="description">NightRyu的博客，偶尔会发一些学习笔记和杂谈</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">NightRyu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
