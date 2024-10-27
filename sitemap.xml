@@ -2,18 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://bmcastle.club/2023/04/19/OpenGL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2023-04-20</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://bmcastle.club/2023/03/23/%E8%A7%A3%E5%86%B3%E5%BC%80%E5%90%AFCDN%E5%90%8E%E7%BD%91%E7%AB%99%E8%A2%AB%E6%97%A0%E9%99%90%E9%87%8D%E5%AE%9A%E5%90%91%E7%9A%84%E9%97%AE%E9%A2%98/</loc>
     
-    <lastmod>2023-03-23</lastmod>
+    <lastmod>2024-10-27</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -140,13 +131,6 @@
   
   <url>
     <loc>http://bmcastle.club/tags/%E4%BD%9C%E4%B8%9A/</loc>
-    <lastmod>2024-10-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://bmcastle.club/tags/OpenGL/</loc>
     <lastmod>2024-10-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
