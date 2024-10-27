@@ -149,6 +149,213 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://bmcastle.club/2023/04/19/OpenGL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NightRyu">
+      <meta itemprop="description" content="NightRyu的博客，偶尔会发一些学习笔记和杂谈">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NightRyu的城堡">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/04/19/OpenGL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">OpenGL学习笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-04-19 23:00:54" itemprop="dateCreated datePublished" datetime="2023-04-19T23:00:54+08:00">2023-04-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-04-20 19:48:06" itemprop="dateModified" datetime="2023-04-20T19:48:06+08:00">2023-04-20</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>待补充<br>要点<br>OpenGL是什么<br>OpenGL能做什么</p>
+<p>引用教程：<a target="_blank" rel="noopener" href="https://blog.csdn.net/Wang_Dou_Dou_/article/details/121240714">https://blog.csdn.net/Wang_Dou_Dou_/article/details/121240714</a></p>
+<h1 id="图形渲染管线"><a href="#图形渲染管线" class="headerlink" title="图形渲染管线"></a>图形渲染管线</h1><h2 id="管线渲染流程"><a href="#管线渲染流程" class="headerlink" title="管线渲染流程"></a>管线渲染流程</h2><p><del><strong>描述一下什么是管线渲染</strong></del></p>
+<p>这里是一个比较简单的管线渲染流程。</p>
+<ol>
+<li><p>顶点着色器(Vertex Shader)将各个顶点作为输入，将一种3D坐标转换为另一种3D坐标。</p>
+</li>
+<li><p>图元装配(Primitive Assembly)将顶点着色器的顶点作为输入，将输入的数据矩阵变换位置，装配成图元形状。</p>
+</li>
+<li><p>将图元装配的结果输入到几何着色器(Geometry Shader)。通过输入的图元形式的一系列顶点的集合，通过新产生的顶点构造出新的图元来生成其他形状</p>
+</li>
+<li><p>几何着色器输出后进入光栅化阶段(Rasterization Stage)，将图元映射成屏幕上的像素，生成片段着色器使用的片段(Fregment)</p>
+</li>
+<li><p>片段着色器(Fragment Shader，又称为片元着色器)计算每个像素的最终颜色</p>
+</li>
+</ol>
+<h2 id="绘制一个三角形"><a href="#绘制一个三角形" class="headerlink" title="绘制一个三角形"></a>绘制一个三角形</h2><p>编写顶点位置</p>
+<p>编写顶点着色器</p>
+<p>编写片元着色器</p>
+<p>着色器程序</p>
+<p>链接顶点属性</p>
+<p>顶点缓冲对象(VBO)顶点数组对象(VAO)(两者通常同时出现)</p>
+<p>绘制三角形</p>
+<h2 id="着色器语言"><a href="#着色器语言" class="headerlink" title="着色器语言"></a>着色器语言</h2><p>着色器之间通常不能通信，之间所有的沟通仅通过输入和输出</p>
+<p>通常使用名为GLSL(OpenGL Shading Language)的类C语言编写</p>
+<p>在开头处声明版本，输入输出变量、uniform，随后是函数入口点 void mian()。在main函数中处理所有输入变量，并将结果送入输出变量</p>
+<p>常用的模板</p>
+<pre><code>    #version 330 core
+
+    in vector_type in_variable_name;
+    out vector_typr out_variable_name;
+
+    uniform type uniform_name;
+
+    void main()&#123;
+        //处理输入的数据并进行图形操作
+        ...
+        //将输出的数据送入输出变量
+        out_variable_name = 处理的数据;
+    &#125;
+</code></pre>
+<p>GLSL 中的向量是一个可以包含有1、2、3 或者 4 个分量的容器，分量的类型可以是前面默认基础类型的任意一个。它们可以是下面的形式(n代表分量的数量)</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vec+n</td>
+<td>包含n个float分量的向量</td>
+</tr>
+<tr>
+<td>bvec+n</td>
+<td>包含n个boolean分量的向量</td>
+</tr>
+<tr>
+<td>ivec+n</td>
+<td>包含n个int分量的向量</td>
+</tr>
+<tr>
+<td>uvec+n</td>
+<td>包含n个unsigned int分量的向量</td>
+</tr>
+<tr>
+<td>dvec+n</td>
+<td>包含n个double分量的向量</td>
+</tr>
+</tbody></table>
+<p>想要获取分量，可以使用 向量名.x 的格式获取第一个分量，同理使用 .y .z .w获取第2、3、4个分量</p>
+<p>可以通过组合xyzw的形式进行向量重组</p>
+<pre><code>    //如果向量构造器中只提供了一个标量参数，则向量中所有值都会设定为该参数，即
+    //color=&#123;1.0,1.0,1.0,1.0&#125;
+    vec4 color = vec4(1.0);
+
+    //向量重组
+    vec2 someVec;
+    vec4 differentVec = someVec.xyxx;
+    vec3 anotherVec = differentVec.zyw;
+    vec4 otherVec = someVec.xxxx + anotherVec.yxzy;
+</code></pre>
+<h2 id="顶点-x2F-片元着色器"><a href="#顶点-x2F-片元着色器" class="headerlink" title="顶点&#x2F;片元着色器"></a>顶点&#x2F;片元着色器</h2><h2 id="VBO、VAO、EBO"><a href="#VBO、VAO、EBO" class="headerlink" title="VBO、VAO、EBO"></a>VBO、VAO、EBO</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://bmcastle.club/2023/03/23/%E8%A7%A3%E5%86%B3%E5%BC%80%E5%90%AFCDN%E5%90%8E%E7%BD%91%E7%AB%99%E8%A2%AB%E6%97%A0%E9%99%90%E9%87%8D%E5%AE%9A%E5%90%91%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="NightRyu">
+      <meta itemprop="description" content="NightRyu的博客，偶尔会发一些学习笔记和杂谈">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NightRyu的城堡">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/03/23/%E8%A7%A3%E5%86%B3%E5%BC%80%E5%90%AFCDN%E5%90%8E%E7%BD%91%E7%AB%99%E8%A2%AB%E6%97%A0%E9%99%90%E9%87%8D%E5%AE%9A%E5%90%91%E7%9A%84%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">解决开启CDN后网站被无限重定向的问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-03-23 12:55:58 / 修改时间：13:34:07" itemprop="dateCreated datePublished" datetime="2023-03-23T12:55:58+08:00">2023-03-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><del>改天写一下将网站DNS迁移到Cloudflare上的心路历程</del></p>
+<p>昨天上课摸鱼，想着用手机上一下博客，结果浏览器提示我被重定向次数过多，清除cookie也没有效果，遂上网搜索解决方案。</p>
+<h1 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h1><p>将网站的DNS服务迁移到Cloduflare上，并开启了SSL之后，出现无限重定向问题。<br>当网站采用了Cloudflare后，用户访问网站时，会先访问离用户较近的Cloudflare服务器，再由Cloudflare服务器代理用户请求访问我们的服务器<del>突然意识到给GithubPages上Cloudflare有点脱裤子放屁</del></p>
+<h1 id="处理"><a href="#处理" class="headerlink" title="处理"></a>处理</h1>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://bmcastle.club/2023/02/08/%E5%9C%A8Github%E4%B8%8A%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -647,12 +854,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -679,7 +886,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
